@@ -1,0 +1,476 @@
+flowMeta:
+  name: A
+  description: 健康规划agent团队
+  avatarIcon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/common/emojiitem_00_10@2x.png
+  avatarColor: '#FFEAD5'
+  advancedConfig: '{"prologue":{"enabled":true,"inputExample":["","",""]},"textToSpeech":{"enabled":true,"vcn_cn":"x5_lingxiaotang_flow","vcn_en":""}}'
+  dslVersion: v1
+flowData:
+  nodes:
+  - id: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    dragging: false
+    selected: false
+    width: 362
+    height: 82
+    position:
+      x: -256.908195355647
+      y: 485.9453652655769
+    positionAbsolute:
+      x: -256.908195355647
+      y: 485.9453652655769
+    type: custom
+    data:
+      allowInputReference: false
+      allowOutputReference: true
+      label: 开始
+      status: ''
+      nodeMeta:
+        aliasName: 开始节点
+        nodeType: 基础节点
+      inputs: [
+        ]
+      outputs:
+      - id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+        name: AGENT_USER_INPUT
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 用户本轮对话输入内容
+        required: true
+        deleteDisabled: true
+      nodeParam: {
+        }
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/start-node-icon.png
+      description: 工作流的开启节点，用于定义流程调用所需的业务变量信息。
+      updatable: false
+  - id: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    dragging: false
+    selected: false
+    width: 362
+    height: 82
+    position:
+      x: 1102.9316831017522
+      y: 159.17888762342358
+    positionAbsolute:
+      x: 1102.9316831017522
+      y: 159.17888762342358
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: false
+      label: 结束
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: 结束节点
+        nodeType: 基础节点
+      inputs:
+      - id: 82de2b42-a059-4c98-bffb-b6b4800fcac9
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: 6b7ef129-2f80-4bb0-bffa-7fd637e2c597
+              nodeId: spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+              name: output
+            contentErrMsg: ''
+        fileType: ''
+      outputs: [
+        ]
+      nodeParam:
+        template: '{{output}}}'
+        streamOutput: true
+        outputMode: 1
+        templateErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/end-node-icon.png
+      description: 工作流的结束节点，用于输出工作流运行后的最终结果。
+      updatable: false
+  - id: spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+    dragging: false
+    selected: false
+    width: 362
+    height: 132
+    position:
+      x: 588.1846123376661
+      y: 55.57092708265881
+    positionAbsolute:
+      x: 588.1846123376661
+      y: 55.57092708265881
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 健康分析师
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        nodeType: 基础节点
+        aliasName: 大模型
+      inputs:
+      - id: 76b55dfc-9bfc-4c34-9cdb-02c0d2656774
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: a56c4259-7efb-4047-b606-6a2fade0654d
+              nodeId: spark-llm::0dcd6506-7da7-40a0-9a9e-212f8c0bc9d1
+              name: output
+            contentErrMsg: ''
+        fileType: ''
+      - id: fe7e9ff1-106d-48aa-b672-0b161e569dfa
+        name: user_input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+              name: AGENT_USER_INPUT
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: 6b7ef129-2f80-4bb0-bffa-7fd637e2c597
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: ''
+      nodeParam:
+        maxTokens: 2048
+        topK: 4
+        auditing: default
+        template: 回答前要搜索并参考最新前沿相关文献. 如果有引用要给出引用链接
+        respFormat: 0
+        appId: 680ab54f
+        uid: bd96e6eb-8d98-4711-a6cb-8c65a0fda6ff
+        enableChatHistoryV2:
+          isEnabled: false
+          rounds: 1
+        templateErrMsg: ''
+        llmId: 593066024
+        domain: deepseek-chat
+        serviceId: deepseek-chat
+        url: https://api.deepseek.com/v1/chat/completions
+        modelId: 1
+        isThink: false
+        multiMode: false
+        modelName: ds
+        modelEnabled: true
+        llmIdErrMsg: ''
+        source: deepseek
+        extraParams:
+          temperature: 1
+        systemTemplate: "这是用户的苹果健康数据{{input}},你是健康分析助手。\n以上用户的苹果健康数据可能包含但不限于：\n步数、\
+          活动消耗、静息心率、睡眠时长、呼吸频率、血氧、体重、运动记录等。\n你的任务：\n1. 先提取并整理用户的关键健康指标\n2. 判断这些数据反映\
+          出的状态\n3. 输出一段简洁健康报告\n4. 给出一句话建议摘要, \n5. 具体的当日饮食建议, 如果你觉得用户需要补充剂那么放在饮食建议的\
+          结尾,注明不是医疗建议.\n6. 如果数据缺失，就明确说缺什么，不要乱编\n7. 结合以上信息回应用户的特定输入: {{user_input}}}\n\
+          输出格式固定为：\n【健康数据摘要】\n- 步数：\n- 睡眠：\n- 心率：\n- 运动：\n- 其他：\n【健康报告】\n...\n【一句话\
+          建议摘要】\n\n【今日饮食建议】\n\n\n回答您具体的关心: (回应用户这次的特定输入)"
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/largeModelIcon.png
+      description: 根据输入的提示词，调用选定的大模型，对提示词作出回答
+      updatable: false
+  - id: ifly-code::43e6e867-0938-4e12-834b-0e896a6dc515
+    dragging: false
+    selected: false
+    width: 362
+    height: 108
+    position:
+      x: 174.78013973831492
+      y: 576.2164489301526
+    positionAbsolute:
+      x: 174.78013973831492
+      y: 576.2164489301526
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 代码_1
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        nodeType: 工具
+        aliasName: 代码
+      inputs:
+      - id: dd591038-cda8-4f4c-bd25-c74241a7db2f
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+              name: AGENT_USER_INPUT
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: fcac40bf-9067-422e-9a38-0d9725d99b30
+        name: key0
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 原始健康数据
+      nodeParam:
+        code: |+
+          # -*- coding: utf-8 -*-
+          def main(input):
+              input = "/health-data"
+              import os
+              import zipfile
+              import tempfile
+              import csv
+
+              def pick_latest_zip(folder):
+                  zips = [os.path.join(folder, f) for f in os.listdir(folder) if f.lower().endswith(".zip")]
+                  if not zips:
+                      return None
+                  return max(zips, key=os.path.getmtime)
+
+              def strip_export_suffix(name):
+                  base = os.path.basename(name)
+                  base = os.path.splitext(base)[0]
+                  if "_SimpleHealthExportCSV" in base:
+                      base = base.split("_SimpleHealthExportCSV")[0]
+                  return base
+
+              if not input or not os.path.isdir(input):
+                  return {"key0": f"错误: 输入路径不存在: {input}"}
+
+              latest_zip = pick_latest_zip(input)
+              if not latest_zip:
+                  return {"key0": "错误: 没有 zip 文件"}
+
+              keep_keywords = [
+                  "HeartRate",
+                  "RestingHeartRate",
+                  "HeartRateVariabilitySDNN",
+                  "OxygenSaturation",
+                  "RespiratoryRate",
+                  "StepCount",
+                  "ActiveEnergyBurned",
+                  "BasalEnergyBurned",
+                  "BodyMass",
+                  "BodyFatPercentage",
+                  "BodyMassIndex",
+                  "SleepAnalysis",
+                  "AppleExerciseTime",
+                  "AppleStandTime",
+                  "DistanceWalkingRunning",
+                  "WalkingHeartRateAverage",
+                  "VO2Max",
+                  "Workout"
+              ]
+
+              merged_lines = []
+
+              with tempfile.TemporaryDirectory() as tmpdir:
+                  with zipfile.ZipFile(latest_zip, "r") as zf:
+                      zf.extractall(tmpdir)
+
+                  csv_files = []
+                  for root, _, files in os.walk(tmpdir):
+                      for f in files:
+                          if f.lower().endswith(".csv"):
+                              csv_files.append(os.path.join(root, f))
+
+                  kept_any = False
+
+                  for csv_path in sorted(csv_files):
+                      file_type = strip_export_suffix(csv_path)
+                      if not any(k in file_type for k in keep_keywords):
+                          continue
+
+                      try:
+                          with open(csv_path, "r", encoding="utf-8-sig", newline="") as f:
+                              lines = f.readlines()
+
+                          if len(lines) < 2:
+                              continue
+
+                          # 跳过第一行 sep=,
+                          reader = csv.DictReader(lines[1:])
+
+                          file_lines = []
+                          parsed = 0
+
+                          for row in reader:
+                              if not row:
+                                  continue
+
+                              value = str(row.get("value", "")).strip()
+                              if value == "":
+                                  continue
+
+                              type_name = str(row.get("type", file_type)).strip()
+                              start_date = str(row.get("startDate", "")).strip()
+                              end_date = str(row.get("endDate", "")).strip()
+                              unit = str(row.get("unit", "")).strip()
+
+                              file_lines.append(
+                                  f"type={type_name}; startDate={start_date}; endDate={end_date}; unit={unit}; value={value}"
+                              )
+                              parsed += 1
+
+                          if parsed > 0:
+                              kept_any = True
+                              merged_lines.append(f"===== {file_type} =====")
+                              merged_lines.extend(file_lines[-20:])
+                              merged_lines.append("")
+
+                      except Exception as e:
+                          merged_lines.append(f"===== {file_type} =====")
+                          merged_lines.append(f"解析失败: {e}")
+                          merged_lines.append("")
+
+              if not kept_any:
+                  return {"key0": "没有解析到有效健康数据"}
+
+              return {"key0": "\n".join(merged_lines[:400])}
+
+        appId: 680ab54f
+        uid: bd96e6eb-8d98-4711-a6cb-8c65a0fda6ff
+        codeErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/codeIcon.png
+      description: 面向开发者提供代码开发能力，目前仅支持python语言，允许使用该节点已定义的变量作为参数传入，返回语句用于输出函数的结果
+      updatable: false
+  - id: spark-llm::0dcd6506-7da7-40a0-9a9e-212f8c0bc9d1
+    dragging: false
+    selected: false
+    width: 362
+    height: 132
+    position:
+      x: 342.34452960852366
+      y: 309.162490994824
+    positionAbsolute:
+      x: 342.34452960852366
+      y: 309.162490994824
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 数据提炼员
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        nodeType: 基础节点
+        aliasName: 大模型
+      inputs:
+      - id: ca8029aa-cb1b-4fb2-9db0-c957b576af04
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: fcac40bf-9067-422e-9a38-0d9725d99b30
+              nodeId: ifly-code::43e6e867-0938-4e12-834b-0e896a6dc515
+              name: key0
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: a56c4259-7efb-4047-b606-6a2fade0654d
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 健康摘要
+      nodeParam:
+        maxTokens: 2048
+        topK: 4
+        auditing: default
+        template: '-'
+        respFormat: 0
+        appId: 680ab54f
+        uid: bd96e6eb-8d98-4711-a6cb-8c65a0fda6ff
+        enableChatHistoryV2:
+          isEnabled: false
+          rounds: 1
+        templateErrMsg: ''
+        llmId: 593066024
+        domain: deepseek-chat
+        serviceId: deepseek-chat
+        url: https://api.deepseek.com/v1/chat/completions
+        modelId: 1
+        isThink: false
+        multiMode: false
+        modelName: ds
+        modelEnabled: true
+        llmIdErrMsg: ''
+        source: deepseek
+        extraParams:
+          temperature: 1
+        systemTemplate: |-
+          下面是苹果健康数据原始记录，请你自动提炼成健康摘要。
+          要求：
+          1. 只保留最近24时间段内 对健康分析有用的信息
+          2. 总结睡眠、心率、静息心率、HRV、血氧、呼吸率、步数、活动消耗、体重、BMI 等
+          3. 如果有异常趋势，指出来
+          4. 输出结构化摘要，便于后续生成营养建议
+          原始健康数据：
+          {{input}}
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/largeModelIcon.png
+      description: 根据输入的提示词，调用选定的大模型，对提示词作出回答
+      updatable: false
+  edges:
+  - source: ifly-code::43e6e867-0938-4e12-834b-0e896a6dc515
+    target: spark-llm::0dcd6506-7da7-40a0-9a9e-212f8c0bc9d1
+    type: customEdge
+    id: reactflow__edge-ifly-code::43e6e867-0938-4e12-834b-0e896a6dc515-spark-llm::0dcd6506-7da7-40a0-9a9e-212f8c0bc9d1
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: spark-llm::0dcd6506-7da7-40a0-9a9e-212f8c0bc9d1
+    target: spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+    type: customEdge
+    id: reactflow__edge-spark-llm::0dcd6506-7da7-40a0-9a9e-212f8c0bc9d1-spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    target: ifly-code::43e6e867-0938-4e12-834b-0e896a6dc515
+    type: customEdge
+    id: reactflow__edge-node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783-ifly-code::43e6e867-0938-4e12-834b-0e896a6dc515
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    target: spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+    type: customEdge
+    id: reactflow__edge-node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783-spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2
+    target: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    type: customEdge
+    id: reactflow__edge-spark-llm::20afd418-ae35-4d43-9067-73a75caeb8f2-node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
